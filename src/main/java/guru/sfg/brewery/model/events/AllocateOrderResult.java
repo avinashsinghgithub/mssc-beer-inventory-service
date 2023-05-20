@@ -6,12 +6,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Created by jt on 12/3/19.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class AllocateOrderResult {
-    private BeerOrderDto beerOrder;
-    private Boolean allocateError = false;
+    private BeerOrderDto beerOrderDto;
+    private Boolean allocationError = false;
     private Boolean pendingInventory = false;
 }

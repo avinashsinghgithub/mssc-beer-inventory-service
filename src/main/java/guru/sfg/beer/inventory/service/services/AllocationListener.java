@@ -9,6 +9,9 @@ import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
 
+/**
+ * Created by jt on 12/3/19.
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Component
@@ -17,21 +20,27 @@ public class AllocationListener {
     private final JmsTemplate jmsTemplate;
 
     @JmsListener(destination = JmsConfig.ALLOCATE_ORDER_QUEUE)
-    public  void listen(AllocateOrderRequest request){
+    public void listen(AllocateOrderRequest request){
         AllocateOrderResult.AllocateOrderResultBuilder builder = AllocateOrderResult.builder();
-        builder.beerOrder(request.getBeerOrder());
-        try {
-            Boolean allocationResult = allocationService.allocateOrder(request.getBeerOrder());
-            if(allocationResult){
+        builder.beerOrderDto(request.getBeerOrderDto());
+
+        try{
+            Boolean allocationResult = allocationService.allocateOrder(request.getBeerOrderDto());
+
+            if (allocationResult){
                 builder.pendingInventory(false);
             } else {
                 builder.pendingInventory(true);
             }
-            builder.allocateError(false);
+
+            builder.allocationError(false);
         } catch (Exception e){
-            log.error("Allocation failed for order id: "+request.getBeerOrder().getId());
-            builder.allocateError(true);
+            log.error("Allocation failed for Order Id:" + request.getBeerOrderDto().getId());
+            builder.allocationError(true);
         }
-        jmsTemplate.convertAndSend(JmsConfig.ALLOCATE_ORDER_RESPONSE_QUEUE, builder.build());
+
+        jmsTemplate.convertAndSend(JmsConfig.ALLOCATE_ORDER_RESPONSE_QUEUE,
+                builder.build());
+
     }
 }
