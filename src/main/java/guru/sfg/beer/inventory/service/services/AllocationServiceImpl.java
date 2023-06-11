@@ -27,6 +27,8 @@ public class AllocationServiceImpl implements AllocationService {
                 -(beerOrderLine.getQuantityAllocated() != null ? beerOrderLine.getQuantityAllocated() : 0)) > 0)){
                 allocateBeerOrderLine(beerOrderLine);
             }
+            totalOrdered.getAndAdd(beerOrderLine.getOrderQuantity());
+            totalAllocated.getAndAdd(beerOrderLine.getQuantityAllocated());
          });
         log.debug("Total ordered: "+totalOrdered.get()+" Total allocated: "+totalAllocated.get());
         return totalAllocated.get() == totalOrdered.get();
@@ -60,6 +62,9 @@ public class AllocationServiceImpl implements AllocationService {
             } else if (inventory > 0){ // partial allocation
                 beerOrderLine.setQuantityAllocated(allocatedQty + inventory);
                 beerInventory.setQuantityOnHand(0);
+
+            }
+            if(beerInventory.getQuantityOnHand() == 0){
                 beerInventoryRepository.delete(beerInventory);
             }
         });
