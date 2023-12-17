@@ -4,9 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.github.sfg-beer-works</groupId>
-        <artifactId>sfg-brewery-bom</artifactId>
-        <version>1.0.17</version>
+        <groupId>io.github.avinashsinghgithub</groupId>
+        <artifactId>sfg-bear-projects-dependencies</artifactId>
+        <version>1.0.24</version>
     </parent>
 
     <groupId>guru.springframework</groupId>
